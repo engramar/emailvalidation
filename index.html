@@ -1,0 +1,66 @@
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="http://api.addressy.com/css/examples-1.00.min.css"/>
+
+    <script>
+      (function (n, t, i, r) {
+        var u, f;
+    
+        n[i] = n[i] || {};
+        n[i].initial = {
+          accountCode: "LOQAT11268",
+          host: "LOQAT11268.pcapredict.com"
+        };
+    
+        n[i].on = n[i].on || function () {
+          (n[i].onq = n[i].onq || []).push(arguments);
+        };
+    
+        u = t.createElement("script");
+        u.async = true;
+        u.src = r;
+    
+        f = t.getElementsByTagName("script")[0];
+        f.parentNode.insertBefore(u, f);
+    
+        // Add an event listener for when the script is loaded
+        u.onload = function() {
+          console.log("sensor.js script loaded");
+        };
+    
+      })(window, document, "pca", "//LOQAT11268.pcapredict.com/js/sensor.js");
+    
+      // Ensure pca is available before attaching event listener
+      (function checkPcaAvailability() {
+        if (window.pca && typeof pca.on === 'function') {
+          pca.on('data', function (source, key, address, returnData) {
+            console.log("pca 'data' event triggered");
+            console.log("source:", source);
+            console.log("key:", key);
+            console.log("address:", address);
+            console.log("returnData:", returnData);
+    
+            if (source === "emailvalidation") {
+              let emailElement = document.getElementById('emailID');
+              if (emailElement) {
+                emailElement.value = returnData.IsDisposableOrTemporary;
+              }
+            }
+          });
+        } else {
+          console.log("pca is not available yet");
+          setTimeout(checkPcaAvailability, 1000); // Retry after 1 second
+        }
+      })();
+    </script>
+    
+	</head>
+	<body>
+		<fieldset>
+
+			<label for="Email">Email</label>
+			<input id="Email" type="text" placeholder="" autofocus/>
+
+    </fieldset>
+	</body>
+</html>
